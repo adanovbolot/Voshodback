@@ -233,65 +233,97 @@ class Receipt(models.Model):
         null=True,
     )
     timestamp = models.BigIntegerField(
-        verbose_name='Временная метка'
+        verbose_name='Временная метка',
+        blank=True,
+        null=True
     )
     userId = models.CharField(
         max_length=255,
-        verbose_name='Идентификатор пользователя'
+        verbose_name='Идентификатор пользователя',
+        blank=True,
+        null=True
     )
     type = models.CharField(
         max_length=255,
-        verbose_name='Тип'
+        verbose_name='Тип',
+        blank=True,
+        null=True
     )
     version = models.IntegerField(
-        verbose_name='Версия'
+        verbose_name='Версия',
+        blank=True,
+        null=True
     )
     deviceId = models.CharField(
         max_length=255,
-        verbose_name='Идентификатор устройства'
+        verbose_name='Идентификатор устройства',
+        blank=True,
+        null=True
     )
     storeId = models.CharField(
         max_length=255,
-        verbose_name='Идентификатор магазина'
+        verbose_name='Идентификатор магазина',
+        blank=True,
+        null=True
     )
     dateTime = models.DateTimeField(
-        verbose_name='Дата и время'
+        verbose_name='Дата и время',
+        blank=True,
+        null=True
     )
     shiftId = models.CharField(
         max_length=255,
-        verbose_name='Идентификатор смены'
+        verbose_name='Идентификатор смены',
+        blank=True,
+        null=True
     )
     employeeId = models.CharField(
         max_length=255,
-        verbose_name='Идентификатор сотрудника'
+        verbose_name='Идентификатор сотрудника',
+        blank=True,
+        null=True
     )
     paymentSource = models.CharField(
         max_length=255,
-        verbose_name='Источник оплаты'
+        verbose_name='Источник оплаты',
+        blank=True,
+        null=True
     )
     infoCheck = models.BooleanField(
-        verbose_name='Информационный чек'
+        verbose_name='Информационный чек',
+        blank=True,
+        null=True
     )
     egais = models.BooleanField(
-        verbose_name='ЕГАИС'
+        verbose_name='ЕГАИС',
+        blank=True,
+        null=True
     )
     totalTax = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        verbose_name='Общая сумма налога'
+        verbose_name='Общая сумма налога',
+        blank=True,
+        null=True
     )
     totalDiscount = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        verbose_name='Общая сумма скидки'
+        verbose_name='Общая сумма скидки',
+        blank=True,
+        null=True
     )
     totalAmount = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        verbose_name='Общая сумма'
+        verbose_name='Общая сумма',
+        blank=True,
+        null=True
     )
     extras = models.JSONField(
-        verbose_name='Дополнительные данные'
+        verbose_name='Дополнительные данные',
+        blank=True,
+        null=True
     )
 
     def __str__(self):
