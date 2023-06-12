@@ -232,10 +232,11 @@ class Receipt(models.Model):
     #     blank=True,
     #     null=True,
     # )
-    id_receipt = models.PositiveIntegerField(
+    id_receipt = models.CharField(
         verbose_name='ID',
         blank=True,
         null=True,
+        max_length=255
     )
     timestamp = models.BigIntegerField(
         verbose_name='Временная метка',
