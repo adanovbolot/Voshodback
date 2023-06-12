@@ -36,3 +36,9 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Product
         fields = '__all__'
+
+
+class ReceiptSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Receipt
+        fields = '__all__'

@@ -1,4 +1,6 @@
 from rest_framework.response import Response
+
+from .serializers import ReceiptSerializer
 from .utils import generate_token
 import logging
 import requests
@@ -351,3 +353,16 @@ class ProductCreate(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class ReceiptView(APIView):
+    def post(self, request):
+        token = generate_token()
+        request.data['token'] = token
+        serializer = ReceiptSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            logger.info('Данные успешно сохранены: {}'.format(serializer.data))
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        logger.error('Ошибка при сохранении данных: {}'.format(serializer.errors))
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

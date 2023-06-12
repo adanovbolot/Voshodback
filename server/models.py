@@ -219,3 +219,80 @@ class Product(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+
+class Receipt(models.Model):
+    class Meta:
+        verbose_name = 'Чек'
+        verbose_name_plural = 'Чеки'
+
+    token = models.CharField(
+        verbose_name='Токен',
+        max_length=250,
+        blank=True,
+        null=True,
+    )
+    timestamp = models.BigIntegerField(
+        verbose_name='Временная метка'
+    )
+    userId = models.CharField(
+        max_length=255,
+        verbose_name='Идентификатор пользователя'
+    )
+    type = models.CharField(
+        max_length=255,
+        verbose_name='Тип'
+    )
+    version = models.IntegerField(
+        verbose_name='Версия'
+    )
+    deviceId = models.CharField(
+        max_length=255,
+        verbose_name='Идентификатор устройства'
+    )
+    storeId = models.CharField(
+        max_length=255,
+        verbose_name='Идентификатор магазина'
+    )
+    dateTime = models.DateTimeField(
+        verbose_name='Дата и время'
+    )
+    shiftId = models.CharField(
+        max_length=255,
+        verbose_name='Идентификатор смены'
+    )
+    employeeId = models.CharField(
+        max_length=255,
+        verbose_name='Идентификатор сотрудника'
+    )
+    paymentSource = models.CharField(
+        max_length=255,
+        verbose_name='Источник оплаты'
+    )
+    infoCheck = models.BooleanField(
+        verbose_name='Информационный чек'
+    )
+    egais = models.BooleanField(
+        verbose_name='ЕГАИС'
+    )
+    totalTax = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Общая сумма налога'
+    )
+    totalDiscount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Общая сумма скидки'
+    )
+    totalAmount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Общая сумма'
+    )
+    extras = models.JSONField(
+        verbose_name='Дополнительные данные'
+    )
+
+    def __str__(self):
+        return f"{self.type}, {self.userId}"
