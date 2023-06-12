@@ -226,12 +226,12 @@ class Receipt(models.Model):
         verbose_name = 'Чек'
         verbose_name_plural = 'Чеки'
 
-    token = models.CharField(
-        verbose_name='Токен',
-        max_length=250,
-        blank=True,
-        null=True,
-    )
+    # token = models.CharField(
+    #     verbose_name='Токен',
+    #     max_length=250,
+    #     blank=True,
+    #     null=True,
+    # )
     timestamp = models.BigIntegerField(
         verbose_name='Временная метка',
         blank=True,

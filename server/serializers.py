@@ -41,4 +41,4 @@ class ProductSerializer(serializers.ModelSerializer):
 class ReceiptSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Receipt
-        fields = ('id', 'token')
+        fields = "__all__"

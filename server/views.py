@@ -355,45 +355,13 @@ class ProductCreate(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class ReceiptCreateView(generics.CreateAPIView):
-    serializer_class = ReceiptSerializer
+class ReceiptView(APIView):
+    def post(self, request):
+        serializer = ReceiptSerializer(data=request.data)
+        if serializer.is_valid():
+            receipt = serializer.save()
+            logger.info("Данные успешно сохранены")
+            return Response(serializer.data, status=201)
+        logger.error(f"Ошибка валидации данных: {serializer.errors}")
+        return Response(serializer.errors, status=400)
 
-    def perform_create(self, serializer):
-        token = self.request.data.get('token')
-        serializer.save(token=token)
-        logger.info('Данные успешно сохранены: {}'.format(serializer.data))
-
-    def create(self, request, *args, **kwargs):
-        token = generate_token()
-        request._full_data = {'token': token}
-        response = super().create(request, *args, **kwargs)
-        if response.status_code == status.HTTP_201_CREATED:
-            receipt_data = response.data
-            if 'timestamp' in receipt_data:
-                receipt = models.Receipt.objects.create(
-                    id=receipt_data['id'],
-                    token=receipt_data['token'],
-                    timestamp=receipt_data['timestamp'],
-                    userId=receipt_data['userId'],
-                    type=receipt_data['type'],
-                    version=receipt_data['version'],
-                    deviceId=receipt_data['data']['deviceId'],
-                    storeId=receipt_data['data']['storeId'],
-                    dateTime=receipt_data['data']['dateTime'],
-                    shiftId=receipt_data['data']['shiftId'],
-                    employeeId=receipt_data['data']['employeeId'],
-                    paymentSource=receipt_data['data']['paymentSource'],
-                    infoCheck=receipt_data['data']['infoCheck'],
-                    egais=receipt_data['data']['egais'],
-                    totalTax=receipt_data['data']['totalTax'],
-                    totalDiscount=receipt_data['data']['totalDiscount'],
-                    totalAmount=receipt_data['data']['totalAmount'],
-                    extras=receipt_data['data']['extras']
-                )
-                logger.info('Данные успешно сохранены в модели Receipt: {}'.format(receipt))
-            else:
-                logger.error('Получены некорректные данные: {}'.format(receipt_data))
-                response.data['error'] = 'Некорректные данные'
-                response.status_code = status.HTTP_400_BAD_REQUEST
-        return response
-    
