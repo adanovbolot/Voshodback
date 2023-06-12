@@ -360,6 +360,7 @@ class ReceiptView(APIView):
         data = request.data
 
         receipt_data = {
+            "id_receipt": data.get("id"),
             "timestamp": data.get("timestamp"),
             "userId": data.get("userId"),
             "type": data.get("type"),
@@ -386,3 +387,4 @@ class ReceiptView(APIView):
             return Response(serialized_data, status=status.HTTP_201_CREATED)
         logger.error(f"Ошибка валидации данных: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
