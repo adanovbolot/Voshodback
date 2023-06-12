@@ -357,11 +357,32 @@ class ProductCreate(APIView):
 
 class ReceiptView(APIView):
     def post(self, request):
-        serializer = ReceiptSerializer(data=request.data)
+        data = request.data
+
+        receipt_data = {
+            "timestamp": data.get("timestamp"),
+            "userId": data.get("userId"),
+            "type": data.get("type"),
+            "version": data.get("version"),
+            "deviceId": data.get("data").get("deviceId"),
+            "storeId": data.get("data").get("storeId"),
+            "dateTime": data.get("data").get("dateTime"),
+            "shiftId": data.get("data").get("shiftId"),
+            "employeeId": data.get("data").get("employeeId"),
+            "paymentSource": data.get("data").get("paymentSource"),
+            "infoCheck": data.get("data").get("infoCheck"),
+            "egais": data.get("data").get("egais"),
+            "totalTax": data.get("data").get("totalTax"),
+            "totalDiscount": data.get("data").get("totalDiscount"),
+            "totalAmount": data.get("data").get("totalAmount"),
+            "extras": data.get("data").get("extras"),
+        }
+
+        serializer = ReceiptSerializer(data=receipt_data)
         if serializer.is_valid():
             receipt = serializer.save()
             serialized_data = ReceiptSerializer(receipt).data
             logger.info("Данные успешно сохранены: %s", serialized_data)
-            return Response(serialized_data, status=201)
+            return Response(serialized_data, status=status.HTTP_201_CREATED)
         logger.error(f"Ошибка валидации данных: {serializer.errors}")
-        return Response(serializer.errors, status=400)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
