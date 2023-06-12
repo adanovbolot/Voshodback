@@ -360,8 +360,8 @@ class ReceiptView(APIView):
         serializer = ReceiptSerializer(data=request.data)
         if serializer.is_valid():
             receipt = serializer.save()
-            logger.info("Данные успешно сохранены")
-            return Response(serializer.data, status=201)
+            serialized_data = ReceiptSerializer(receipt).data
+            logger.info("Данные успешно сохранены: %s", serialized_data)
+            return Response(serialized_data, status=201)
         logger.error(f"Ошибка валидации данных: {serializer.errors}")
         return Response(serializer.errors, status=400)
-
