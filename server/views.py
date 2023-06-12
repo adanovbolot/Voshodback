@@ -357,24 +357,11 @@ class ProductCreate(APIView):
 
 class ReceiptView(APIView):
     def post(self, request):
-        headers = request.META
-        data = request.data
-
-        serializer = ReceiptSerializer(data=data)
+        serializer = ReceiptSerializer(data=request.data)
         if serializer.is_valid():
             receipt = serializer.save()
             serialized_data = ReceiptSerializer(receipt).data
             logger.info("Данные успешно сохранены: %s", serialized_data)
-            response_data = {
-                "headers": headers,
-                "data": data,
-                "serialized_data": serialized_data
-            }
-            return Response(response_data, status=status.HTTP_201_CREATED)
+            return Response(serialized_data, status=201)
         logger.error(f"Ошибка валидации данных: {serializer.errors}")
-        response_data = {
-            "headers": headers,
-            "data": data,
-            "errors": serializer.errors
-        }
-        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=400)
