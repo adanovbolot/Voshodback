@@ -49,3 +49,24 @@ class TerminalUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = TerminalUser
         fields = '__all__'
+
+    def to_internal_value(self, data):
+        uuid = data.get('uuid')
+        name = data.get('name')
+        lastName = data.get('lastName')
+        patronymicName = data.get('patronymicName')
+        phone = data.get('phone')
+        code = data.get('code')
+        stores = data.get('stores', [])
+        role = data.get('role')
+
+        return {
+            'uuid': uuid,
+            'name': name,
+            'lastName': lastName,
+            'patronymicName': patronymicName,
+            'phone': phone,
+            'code': code,
+            'stores': stores,
+            'role': role
+        }
