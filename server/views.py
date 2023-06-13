@@ -396,6 +396,9 @@ class TerminalUserView(generics.UpdateAPIView):
 
     def put(self, request, *args, **kwargs):
         uuid = request.data.get('uuid')
+        logger.info("Получен запрос на обновление данных с UUID: %s", uuid)
+        logger.debug("Получен запрос с данными: %s", request.data)
+
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             try:
@@ -410,12 +413,15 @@ class TerminalUserView(generics.UpdateAPIView):
             serialized_data = serializer.data
             if created:
                 logger.info("Данные успешно созданы: %s", serialized_data)
+                logger.debug("Созданы данные с UUID: %s", uuid)
                 print("Данные успешно созданы:", serialized_data)
             else:
                 logger.info("Данные успешно обновлены: %s", serialized_data)
+                logger.debug("Обновлены данные с UUID: %s", uuid)
                 print("Данные успешно обновлены:", serialized_data)
             return Response(serialized_data, status=status.HTTP_200_OK)
         else:
             logger.error("Ошибка валидации данных: %s", serializer.errors)
+            logger.debug("Ошибка валидации данных с UUID: %s", uuid)
             print("Ошибка валидации данных:", serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
