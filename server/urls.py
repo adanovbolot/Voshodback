@@ -14,5 +14,5 @@ urlpatterns = [
     path('product/inventories/search/', views.ProductView.as_view()),
     path('product/create/inventories/', views.ProductCreate.as_view()),
     path('api/v2/receipts/', views.ReceiptView.as_view()),
-    path('api/v1/inventories/employees/', views.TerminalUserView.as_view()),
+    path('api/v1/inventories/employees', views.TerminalUserView.as_view()),
 ]
