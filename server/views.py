@@ -395,5 +395,7 @@ class TerminalUserView(APIView):
         if serializer.is_valid():
             terminal_user = serializer.save()
             serialized_data = serializers.TerminalUserSerializer(terminal_user).data
+            logger.info("Данные успешно сохранены: %s", serialized_data)
             return Response(serialized_data, status=status.HTTP_201_CREATED)
+        logger.error("Ошибка валидации данных: %s", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
