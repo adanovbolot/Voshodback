@@ -396,6 +396,9 @@ class TerminalUserView(generics.UpdateAPIView):
     def put(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
+            uuid = serializer.validated_data['uuid']
+            terminal_user, created = models.TerminalUser.objects.get_or_create(uuid=uuid)
+            serializer.instance = terminal_user
             self.perform_update(serializer)
             serialized_data = serializer.data
             logger.info("Данные успешно сохранены: %s", serialized_data)
