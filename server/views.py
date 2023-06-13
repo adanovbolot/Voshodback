@@ -428,15 +428,17 @@ class TerminalUserView(APIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class TerminalUserCreatePutView(APIView):
-    def post(self, request):
+class TerminalUserUpdateView(APIView):
+    def put(self, request):
         data = request.data
         try:
             user = models.TerminalUser.objects.get(uuid=data['uuid'])
         except models.TerminalUser.DoesNotExist:
-            user = None
+            return Response("Пользователь не найден", status=status.HTTP_404_NOT_FOUND)
+
         serializer = serializers.TerminalUserSerializer(user, data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
