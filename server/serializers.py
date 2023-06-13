@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from . import models
+from .models import TerminalUser
 
 
 class EvotorUsersSerializer(serializers.ModelSerializer):
@@ -42,3 +43,9 @@ class ReceiptSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Receipt
         fields = "__all__"
+
+
+class TerminalUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TerminalUser
+        fields = '__all__'

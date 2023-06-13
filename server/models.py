@@ -334,3 +334,192 @@ class Receipt(models.Model):
 
     def __str__(self):
         return f"{self.type}, {self.userId}"
+
+
+class ProductCategory(models.Model):
+    class Meta:
+        verbose_name = 'Категория товара'
+        verbose_name_plural = 'Категории товаров'
+
+    uuid = models.UUIDField(
+        verbose_name='UUID',
+        unique=True
+    )
+    group = models.BooleanField(
+        verbose_name='Группа'
+    )
+    hasVariants = models.BooleanField(
+        verbose_name='Имеет варианты'
+    )
+    type = models.CharField(
+        max_length=255,
+        verbose_name='Тип',
+        blank=True,
+        null=True
+    )
+    name = models.CharField(
+        max_length=255,
+        verbose_name='Название',
+        blank=True,
+        null=True
+    )
+    code = models.CharField(
+        max_length=255,
+        verbose_name='Код',
+        blank=True,
+        null=True
+    )
+    barCodes = models.JSONField(
+        verbose_name='Штрихкоды',
+        blank=True,
+        null=True
+    )
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Цена',
+        blank=True,
+        null=True
+    )
+    costPrice = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Себестоимость',
+        blank=True,
+        null=True
+    )
+    quantity = models.IntegerField(
+        verbose_name='Количество',
+        blank=True,
+        null=True
+    )
+    measureName = models.CharField(
+        max_length=255,
+        verbose_name='Единица измерения',
+        blank=True,
+        null=True
+    )
+    tax = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Налог',
+        blank=True,
+        null=True
+    )
+    allowToSell = models.BooleanField(
+        verbose_name='Разрешена продажа',
+        blank=True,
+        null=True
+    )
+    description = models.TextField(
+        verbose_name='Описание',
+        blank=True,
+        null=True
+    )
+    articleNumber = models.CharField(
+        max_length=255,
+        verbose_name='Артикул',
+        blank=True,
+        null=True
+    )
+    parentUuid = models.UUIDField(
+        verbose_name='UUID родителя',
+        blank=True,
+        null=True
+    )
+    alcoCodes = models.JSONField(
+        verbose_name='Коды алкогольной продукции',
+        blank=True,
+        null=True
+    )
+    alcoholByVolume = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Крепость алкоголя',
+        blank=True,
+        null=True
+    )
+    alcoholProductKindCode = models.CharField(
+        max_length=255,
+        verbose_name='Код вида алкогольной продукции',
+        blank=True,
+        null=True
+    )
+    tareVolume = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Объем тары',
+        blank=True,
+        null=True
+    )
+    classificationCode = models.CharField(
+        max_length=255,
+        verbose_name='Код классификации',
+        blank=True,
+        null=True
+    )
+    allowPartialSell = models.BooleanField(
+        verbose_name='Разрешена частичная продажа',
+        blank=True,
+        null=True
+    )
+    quantityInPackage = models.IntegerField(
+        verbose_name='Количество в упаковке',
+        blank=True,
+        null=True
+    )
+
+    def __str__(self):
+        return f"{self.name} {self.price}"
+
+
+class TerminalUser(models.Model):
+    class Meta:
+        verbose_name = 'Пользователь терминала'
+        verbose_name_plural = 'Пользователи терминалов'
+
+    uuid = models.UUIDField(
+        verbose_name='UUID'
+    )
+    name = models.CharField(
+        max_length=255,
+        verbose_name='Имя',
+        blank=True,
+        null=True
+    )
+    lastName = models.CharField(
+        max_length=255,
+        verbose_name='Фамилия',
+        blank=True,
+        null=True
+    )
+    patronymicName = models.CharField(
+        max_length=255,
+        verbose_name='Отчество',
+        blank=True,
+        null=True
+    )
+    phone = models.CharField(
+        max_length=255,
+        verbose_name='Телефон',
+        blank=True,
+        null=True
+    )
+    code = models.CharField(
+        max_length=255,
+        verbose_name='Код',
+        blank=True,
+        null=True
+    )
+    stores = models.JSONField(
+        verbose_name='Магазины',
+        blank=True,
+        null=True
+    )
+    role = models.CharField(
+        max_length=255,
+        verbose_name='Роль',
+        blank=True,
+        null=True
+    )
+

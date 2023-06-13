@@ -388,3 +388,12 @@ class ReceiptView(APIView):
         logger.error(f"Ошибка валидации данных: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class TerminalUserView(APIView):
+    def post(self, request):
+        serializer = serializers.TerminalUserSerializer(data=request.data)
+        if serializer.is_valid():
+            terminal_user = serializer.save()
+            serialized_data = serializers.TerminalUserSerializer(terminal_user).data
+            return Response(serialized_data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

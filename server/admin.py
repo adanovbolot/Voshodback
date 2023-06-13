@@ -1,6 +1,5 @@
 from django.contrib import admin
 from . import models
-from .models import Receipt
 
 
 @admin.register(models.EvotorUsers)
@@ -33,6 +32,11 @@ class ProductAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(Receipt)
+@admin.register(models.Receipt)
 class ReceiptAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(models.TerminalUser)
+class TerminalUserAdmin(admin.ModelAdmin):
     pass
