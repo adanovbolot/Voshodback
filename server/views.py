@@ -426,3 +426,17 @@ class TerminalUserView(APIView):
                 logger.debug("Ошибка валидации данных с UUID: %s", uuid)
                 print("Ошибка валидации данных:", serializer.errors)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TerminalUserCreatePutView(APIView):
+    def post(self, request):
+        data = request.data
+        try:
+            user = models.TerminalUser.objects.get(uuid=data['uuid'])
+        except models.TerminalUser.DoesNotExist:
+            user = None
+        serializer = serializers.TerminalUserSerializer(user, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
