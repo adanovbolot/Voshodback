@@ -478,8 +478,11 @@ class TerminalUser(models.Model):
         verbose_name = 'Пользователь терминала'
         verbose_name_plural = 'Пользователи терминалов'
 
-    uuid = models.UUIDField(
-        verbose_name='UUID'
+    uuid = models.CharField(
+        verbose_name='UUID',
+        blank=True,
+        null=True,
+        max_length=200
     )
     name = models.CharField(
         max_length=255,
