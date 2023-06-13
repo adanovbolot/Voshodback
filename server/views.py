@@ -392,17 +392,28 @@ class ReceiptView(APIView):
 class TerminalUserView(generics.UpdateAPIView):
     queryset = models.TerminalUser.objects.all()
     serializer_class = serializers.TerminalUserSerializer
+    lookup_field = 'uuid'
 
     def put(self, request, *args, **kwargs):
+        uuid = request.data.get('uuid')
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            uuid = serializer.validated_data['uuid']
-            terminal_user, created = models.TerminalUser.objects.get_or_create(uuid=uuid)
-            serializer.instance = terminal_user
+            try:
+                terminal_user = models.TerminalUser.objects.get(uuid=uuid)
+                serializer.instance = terminal_user
+                created = False
+            except models.TerminalUser.DoesNotExist:
+                terminal_user = None
+                created = True
+
             self.perform_update(serializer)
             serialized_data = serializer.data
-            logger.info("Данные успешно сохранены: %s", serialized_data)
-            print("Данные успешно сохранены:", serialized_data)
+            if created:
+                logger.info("Данные успешно созданы: %s", serialized_data)
+                print("Данные успешно созданы:", serialized_data)
+            else:
+                logger.info("Данные успешно обновлены: %s", serialized_data)
+                print("Данные успешно обновлены:", serialized_data)
             return Response(serialized_data, status=status.HTTP_200_OK)
         else:
             logger.error("Ошибка валидации данных: %s", serializer.errors)
