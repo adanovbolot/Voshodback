@@ -108,5 +108,7 @@ class ProductCategorySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data['uuid'] = str(uuid.uuid4())
-        validated_data['code'] = str(validated_data['id'])
-        return super().create(validated_data)
+        instance = super().create(validated_data)
+        instance.code = str(instance.id)
+        instance.save()
+        return instance
