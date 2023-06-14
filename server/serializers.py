@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from . import models
 from .models import TerminalUser
+import uuid
 
 
 class EvotorUsersSerializer(serializers.ModelSerializer):
@@ -34,6 +35,7 @@ class TerminalSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Product
         fields = '__all__'
@@ -95,3 +97,16 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Address
         fields = '__all__'
+
+
+class ProductCategorySerializer(serializers.ModelSerializer):
+    group = serializers.BooleanField(default=True)
+
+    class Meta:
+        model = models.Product
+        fields = '__all__'
+
+    def create(self, validated_data):
+        validated_data['uuid'] = str(uuid.uuid4())
+        validated_data['code'] = str(validated_data['id'])
+        return super().create(validated_data)

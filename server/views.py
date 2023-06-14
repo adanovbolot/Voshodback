@@ -1,5 +1,5 @@
 from rest_framework.response import Response
-
+from rest_framework.exceptions import APIException
 from .serializers import ReceiptSerializer
 from .utils import generate_token
 import logging
@@ -531,4 +531,29 @@ class AddressCreatePutView(APIView):
             else:
                 logging.error(f"Ошибка валидации при создании записи с UUID {uuid}.")
                 print(f"Ошибка валидации при создании записи с UUID {uuid}.")
+
+
+class ProductCreateView(generics.CreateAPIView):
+    queryset = models.Product.objects.all()
+    serializer_class = serializers.ProductCategorySerializer
+
+    @staticmethod
+    def create_product(request):
+        url = 'https://api.evotor.ru/api/v1/inventories/stores/20200829-EF34-40C6-803A-06A5F50BB714/products'
+        serializer = serializers.ProductCategorySerializer(data=request.data)
+        if serializer.is_valid():
+            serialized_data = serializer.data
+            try:
+                response = requests.post(url, json=serialized_data)
+                response.raise_for_status()
+                if response.status_code == 201:
+                    return response.json()
+                else:
+                    return None
+            except requests.exceptions.RequestException as e:
+                logging.error(f"Ошибка при отправке запроса: {str(e)}")
+                raise APIException("Ошибка при отправке запроса")
+        else:
+            logging.error(f"Неверные данные: {serializer.errors}")
+            raise APIException("Неверные данные")
 
