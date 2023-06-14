@@ -544,8 +544,13 @@ class ProductCreateView(generics.CreateAPIView):
         if serializer.is_valid():
             serialized_data = serializer.data
             print("Serialized Data:", serialized_data)
+
+            headers = {
+                'X-Authorization': ProductCreateView.get_evotor_token()
+            }
+
             try:
-                response = requests.post(url, json=serialized_data)
+                response = requests.post(url, json=serialized_data, headers=headers)
                 response.raise_for_status()
                 if response.status_code == 201:
                     response_json = response.json()
@@ -564,3 +569,10 @@ class ProductCreateView(generics.CreateAPIView):
             print(error_msg)
             logging.error(error_msg)
             raise APIException("Неверные данные")
+
+    @staticmethod
+    def get_evotor_token():
+        evotor_token = models.EvotorToken.objects.first()
+        if not evotor_token:
+            return None
+        return evotor_token.token
