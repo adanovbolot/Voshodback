@@ -543,7 +543,7 @@ class ProductCreateView(generics.CreateAPIView):
         serializer = serializers.ProductCategorySerializer(data=request.data)
         if serializer.is_valid():
             serialized_data = serializer.data
-            print("Serialized Data:", serialized_data)
+            logging.debug("Serialized Data: %s", serialized_data)
 
             headers = {
                 'X-Authorization': ProductCreateView.get_evotor_token()
@@ -554,19 +554,17 @@ class ProductCreateView(generics.CreateAPIView):
                 response.raise_for_status()
                 if response.status_code == 201:
                     response_json = response.json()
-                    print("Response JSON:", response_json)
+                    logging.debug("Response JSON: %s", response_json)
                     return response_json
                 else:
-                    print("Unexpected response code:", response.status_code)
+                    logging.warning("Unexpected response code: %s", response.status_code)
                     return None
             except requests.exceptions.RequestException as e:
                 error_msg = f"Ошибка при отправке запроса: {str(e)}"
-                print(error_msg)
                 logging.error(error_msg)
                 raise APIException("Ошибка при отправке запроса")
         else:
             error_msg = f"Неверные данные: {serializer.errors}"
-            print(error_msg)
             logging.error(error_msg)
             raise APIException("Неверные данные")
 
