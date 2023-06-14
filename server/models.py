@@ -527,5 +527,26 @@ class TerminalUser(models.Model):
     )
 
 
+class Address(models.Model):
+    uuid = models.CharField(
+        verbose_name='UUID',
+        max_length=200,
+        null=True,
+        blank=True
+    )
+    address = models.CharField(
+        verbose_name='Адрес',
+        max_length=200,
+        null=True,
+        blank=True
+    )
+    name = models.CharField(
+        verbose_name='Название',
+        max_length=200,
+        null=True,
+        blank=True
+    )
 
+    def __str__(self):
+        return self.name
 

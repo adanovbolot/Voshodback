@@ -89,3 +89,9 @@ class TerminalKassaSerializer(serializers.ModelSerializer):
             'store_uuid': store_uuid,
             'timezone_offset': timezone_offset
         }
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Address
+        fields = '__all__'
