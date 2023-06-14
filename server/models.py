@@ -144,114 +144,98 @@ class Product(models.Model):
     uuid = models.CharField(
         max_length=100,
         verbose_name="Уникальный идентификатор",
-        blank=True,
-        null=True
+        null=True,
+        blank=True
     )
     code = models.CharField(
         max_length=100,
         verbose_name="Код",
-        blank=True,
-        null=True
+        null=True,
+        blank=True
     )
     bar_codes = models.JSONField(
         default=list,
         verbose_name="Штрих-коды",
-        blank=True,
         null=True
     )
     alco_codes = models.JSONField(
         default=list,
         verbose_name="Алкокоды",
-        blank=True,
         null=True
     )
     name = models.CharField(
         max_length=200,
         verbose_name="Наименование",
-        blank=True,
         null=True
     )
     price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         verbose_name="Цена",
-        blank=True,
         null=True
     )
     quantity = models.IntegerField(
         verbose_name="Количество",
-        blank=True,
         null=True
     )
     cost_price = models.DecimalField(
         max_digits=10,
         decimal_places=3,
         verbose_name="Себестоимость",
-        blank=True,
         null=True
     )
     measure_name = models.CharField(
         max_length=50,
         verbose_name="Единица измерения",
-        blank=True,
         null=True
     )
     tax = models.CharField(
         max_length=50,
         verbose_name="Налог",
-        blank=True,
         null=True
     )
     allow_to_sell = models.BooleanField(
         verbose_name="Разрешено к продаже",
-        blank=True,
         null=True
     )
     description = models.TextField(
         verbose_name="Описание",
-        blank=True,
         null=True
     )
     article_number = models.CharField(
         max_length=50,
         verbose_name="Артикул",
-        blank=True,
         null=True
     )
     parent_uuid = models.CharField(
         max_length=100,
         verbose_name="Идентификатор родителя",
-        blank=True,
         null=True
     )
     group = models.BooleanField(
         verbose_name="Группа",
-        blank=True,
-        null=True
+        null=True,
+        default=False
     )
     type = models.CharField(
         max_length=50,
         verbose_name="Тип",
-        blank=True,
         null=True
     )
     alcohol_by_volume = models.DecimalField(
         max_digits=5,
         decimal_places=2,
         verbose_name="Крепость алкоголя",
-        blank=True,
         null=True
     )
     alcohol_product_kind_code = models.IntegerField(
         verbose_name="Код вида алкогольной продукции",
-        blank=True,
         null=True
     )
     tare_volume = models.DecimalField(
         max_digits=5,
         decimal_places=2,
         verbose_name="Объем тары",
-        blank=True,
         null=True
     )
 

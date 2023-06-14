@@ -104,7 +104,7 @@ class ProductCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Product
-        fields = '__all__'
+        exclude = ('id',)
 
     def create(self, validated_data):
         validated_data['uuid'] = str(uuid.uuid4())
