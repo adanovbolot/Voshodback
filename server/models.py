@@ -526,3 +526,6 @@ class TerminalUser(models.Model):
         null=True
     )
 
+
+
+

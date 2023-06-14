@@ -70,3 +70,22 @@ class TerminalUserSerializer(serializers.ModelSerializer):
             'stores': stores,
             'role': role
         }
+
+
+class TerminalKassaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Terminal
+        fields = '__all__'
+
+    def to_internal_value(self, data):
+        uuid = data.get('uuid')
+        name = data.get('name')
+        store_uuid = data.get('store_uuid')
+        timezone_offset = data.get('timezone_offset')
+
+        return {
+            'uuid': uuid,
+            'name': name,
+            'store_uuid': store_uuid,
+            'timezone_offset': timezone_offset
+        }

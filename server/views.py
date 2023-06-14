@@ -461,3 +461,38 @@ class TerminalUserCreatePutView(APIView):
             else:
                 logging.error(f"Ошибка валидации при создании записи с UUID {uuid}.")
                 print(f"Ошибка валидации при создании записи с UUID {uuid}.")
+
+
+class TerminalCreatePutView(APIView):
+    def put(self, request):
+        data = request.data
+        if isinstance(data, list):
+            for item in data:
+                self.process_item(item)
+            return Response("Записи успешно обновлены/созданы", status=status.HTTP_200_OK)
+        else:
+            self.process_item(data)
+            return Response("Запись успешно обновлена/создана", status=status.HTTP_200_OK)
+
+    def process_item(self, item):
+        uuid = item.get('uuid')
+
+        try:
+            terminal = models.Terminal.objects.get(uuid=uuid)
+            serializer = serializers.TerminalSerializer(terminal, data=item)
+            if serializer.is_valid():
+                serializer.save()
+                logging.info(f"Запись с UUID {uuid} успешно обновлена.")
+                print(f"Запись с UUID {uuid} успешно обновлена.")
+            else:
+                logging.error(f"Ошибка валидации при обновлении записи с UUID {uuid}.")
+                print(f"Ошибка валидации при обновлении записи с UUID {uuid}.")
+        except models.Terminal.DoesNotExist:
+            serializer = serializers.TerminalSerializer(data=item)
+            if serializer.is_valid():
+                serializer.save()
+                logging.info(f"Запись с UUID {uuid} успешно создана.")
+                print(f"Запись с UUID {uuid} успешно создана.")
+            else:
+                logging.error(f"Ошибка валидации при создании записи с UUID {uuid}.")
+                print(f"Ошибка валидации при создании записи с UUID {uuid}.")

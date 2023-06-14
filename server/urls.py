@@ -15,4 +15,5 @@ urlpatterns = [
     path('product/create/inventories/', views.ProductCreate.as_view()),
     path('api/v2/receipts/', views.ReceiptView.as_view()),
     path('api/v1/inventories/employees', views.TerminalUserCreatePutView.as_view()),
+    path('api/v1/inventories/devices', views.TerminalCreatePutView.as_view()),
 ]
