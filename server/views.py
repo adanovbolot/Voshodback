@@ -537,40 +537,43 @@ class ProductCreateView(generics.CreateAPIView):
     queryset = models.Product.objects.all()
     serializer_class = serializers.ProductCategorySerializer
 
-    @staticmethod
-    def create_product(request):
+    def get_evotor_token(self):
+        evotor_token = models.EvotorToken.objects.first()
+        if not evotor_token:
+            return None
+        return evotor_token.token
+
+    def create_product(self, request):
         url = 'https://api.evotor.ru/api/v1/inventories/stores/20200829-EF34-40C6-803A-06A5F50BB714/products'
         serializer = serializers.ProductCategorySerializer(data=request.data)
         if serializer.is_valid():
             serialized_data = serializer.data
             logging.debug("Serialized Data: %s", serialized_data)
+            print("Serialized Data:", serialized_data)
 
             headers = {
-                'X-Authorization': ProductCreateView.get_evotor_token()
+                'X-Authorization': self.get_evotor_token()
             }
 
             try:
-                response = requests.post(url, json=serialized_data, headers=headers)
+                response = requests.post(url, json=[serialized_data], headers=headers)
                 response.raise_for_status()
                 if response.status_code == 201:
                     response_json = response.json()
                     logging.debug("Response JSON: %s", response_json)
+                    print("Response JSON:", response_json)
                     return response_json
                 else:
                     logging.warning("Unexpected response code: %s", response.status_code)
+                    print("Unexpected response code:", response.status_code)
                     return None
             except requests.exceptions.RequestException as e:
                 error_msg = f"Ошибка при отправке запроса: {str(e)}"
                 logging.error(error_msg)
+                print(error_msg)
                 raise APIException("Ошибка при отправке запроса")
         else:
             error_msg = f"Неверные данные: {serializer.errors}"
             logging.error(error_msg)
+            print(error_msg)
             raise APIException("Неверные данные")
-
-    @staticmethod
-    def get_evotor_token():
-        evotor_token = models.EvotorToken.objects.first()
-        if not evotor_token:
-            return None
-        return evotor_token.token

@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from rest_framework import serializers, status
 from . import models
 from .models import TerminalUser
 import uuid
@@ -112,3 +112,9 @@ class ProductCategorySerializer(serializers.ModelSerializer):
         instance.code = str(instance.id)
         instance.save()
         return instance
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        return data
+
+
