@@ -145,13 +145,11 @@ class Product(models.Model):
         max_length=100,
         verbose_name="Уникальный идентификатор",
         null=True,
-        blank=True
     )
     code = models.CharField(
         max_length=100,
         verbose_name="Код",
         null=True,
-        blank=True
     )
     bar_codes = models.JSONField(
         default=list,

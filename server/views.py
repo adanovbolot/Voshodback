@@ -1,3 +1,5 @@
+import json
+
 from rest_framework.response import Response
 from rest_framework.exceptions import APIException
 from .serializers import ReceiptSerializer
@@ -645,6 +647,7 @@ class ProductCategoryList(generics.CreateAPIView):
         url = 'https://api.evotor.ru/api/v1/inventories/stores/20200829-EF34-40C6-803A-06A5F50BB714/products'
         headers = {
             'Authorization': self.get_evotor_token(),
+            'Content-Type': 'application/json'
         }
 
         logging.debug("Request URL: %s" % url)
@@ -660,3 +663,4 @@ class ProductCategoryList(generics.CreateAPIView):
             return Response(response.json(), status=status.HTTP_201_CREATED)
         else:
             return Response(response.text, status=response.status_code)
+

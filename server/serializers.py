@@ -101,6 +101,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
 class ProductCategorySerializer(serializers.ModelSerializer):
     group = serializers.BooleanField(default=True)
+    name = serializers.CharField(default='Билеты на теплоходы Восход')
 
     class Meta:
         model = models.Product
