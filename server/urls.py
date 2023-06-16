@@ -17,5 +17,6 @@ urlpatterns = [
     path('api/v1/inventories/employees', views.TerminalUserCreatePutView.as_view()),
     path('api/v1/inventories/devices', views.TerminalCreatePutView.as_view()),
     path('api/v1/inventories/stores', views.AddressCreatePutView.as_view()),
-    path('product/create/', views.ProductCreateView.as_view()),
+    path('product/create/', views.ProductCategoryList.as_view()),
+    # path('test/', views.ProductCategoryList.as_view()),
 ]

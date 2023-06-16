@@ -533,8 +533,101 @@ class AddressCreatePutView(APIView):
                 print(f"Ошибка валидации при создании записи с UUID {uuid}.")
 
 
-class ProductCreateView(generics.CreateAPIView):
-    queryset = models.Product.objects.all()
+# class ProductCreateView(generics.CreateAPIView):
+#     queryset = models.Product.objects.all()
+#     serializer_class = serializers.ProductCategorySerializer
+#
+#     def get_evotor_token(self):
+#         evotor_token = models.EvotorToken.objects.first()
+#         if not evotor_token:
+#             return None
+#         return evotor_token.token
+#
+#     def create_product(self, request):
+#         url = 'https://api.evotor.ru/api/v1/inventories/stores/20200829-EF34-40C6-803A-06A5F50BB714/products'
+#         serializer = serializers.ProductCategorySerializer(data=request.data)
+#         if serializer.is_valid():
+#             serialized_data = serializer.data
+#             logging.debug("Serialized Data: %s", serialized_data)
+#             print("Serialized Data:", serialized_data)
+#
+#             headers = {
+#                 'X-Authorization': self.get_evotor_token()
+#             }
+#
+#             try:
+#                 response = requests.post(url, json=serialized_data, headers=headers)
+#                 response.raise_for_status()
+#                 if response.status_code == 201:
+#                     response_json = response.json()
+#                     logging.debug("Response JSON: %s", response_json)
+#                     print("Response JSON:", response_json)
+#                     return response_json
+#                 else:
+#                     logging.warning("Unexpected response code: %s", response.status_code)
+#                     print("Unexpected response code:", response.status_code)
+#                     return None
+#             except requests.exceptions.RequestException as e:
+#                 error_msg = f"Ошибка при отправке запроса: {str(e)}"
+#                 logging.error(error_msg)
+#                 print(error_msg)
+#                 raise APIException("Ошибка при отправке запроса")
+#         else:
+#             error_msg = f"Неверные данные: {serializer.errors}"
+#             logging.error(error_msg)
+#             print(error_msg)
+#             raise APIException("Неверные данные")
+
+
+# class ProductCreateView(generics.ListCreateAPIView):
+#     queryset = models.Product.objects.all()
+#     serializer_class = serializers.ProductCategorySerializer
+#
+    # def get_evotor_token(self):
+    #     evotor_token = models.EvotorToken.objects.first()
+    #     if not evotor_token:
+    #         return None
+    #     return evotor_token.token
+
+#     def create_product(self, request):
+#         url = 'https://api.evotor.ru/api/v1/inventories/stores/20200829-EF34-40C6-803A-06A5F50BB714/products'
+#         serializer = serializers.ProductCategorySerializer(data=request.data)
+#         if serializer.is_valid():
+#             serialized_data = serializer.data
+#             logging.debug("Serialized Data: %s", serialized_data)
+#             print("Serialized Data:", serialized_data)
+#
+#             headers = {
+#                 'X-Authorization': self.get_evotor_token()
+#             }
+#
+#             try:
+#                 response = requests.post(url, json=serialized_data, headers=headers)
+#                 response.raise_for_status()
+#                 if response.status_code == 201:
+#                     response_json = response.json()
+#                     logging.debug("Response JSON: %s", response_json)
+#                     print("Response JSON:", response_json)
+#
+#                     return response_json[0][0]
+#
+#                 else:
+#                     logging.warning("Unexpected response code: %s", response.status_code)
+#                     print("Unexpected response code:", response.status_code)
+#                     return None
+#             except requests.exceptions.RequestException as e:
+#                 error_msg = f"Ошибка при отправке запроса: {str(e)}"
+#                 logging.error(error_msg)
+#                 print(error_msg)
+#                 raise APIException("Ошибка при отправке запроса")
+#         else:
+#             error_msg = f"Неверные данные: {serializer.errors}"
+#             logging.error(error_msg)
+#             print(error_msg)
+#             raise APIException("Неверные данные")
+
+
+class ProductCategoryList(generics.CreateAPIView):
     serializer_class = serializers.ProductCategorySerializer
 
     def get_evotor_token(self):
@@ -543,37 +636,27 @@ class ProductCreateView(generics.CreateAPIView):
             return None
         return evotor_token.token
 
-    def create_product(self, request):
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        response_data = serializer.data if isinstance(request.data, list) else [serializer.data]
+
         url = 'https://api.evotor.ru/api/v1/inventories/stores/20200829-EF34-40C6-803A-06A5F50BB714/products'
-        serializer = serializers.ProductCategorySerializer(data=request.data)
-        if serializer.is_valid():
-            serialized_data = serializer.data
-            logging.debug("Serialized Data: %s", serialized_data)
-            print("Serialized Data:", serialized_data)
+        headers = {
+            'Authorization': self.get_evotor_token(),
+        }
 
-            headers = {
-                'X-Authorization': self.get_evotor_token()
-            }
+        logging.debug("Request URL: %s" % url)
+        logging.debug("Request headers: %s" % headers)
+        logging.debug("Request data: %s" % response_data)
 
-            try:
-                response = requests.post(url, json=[serialized_data], headers=headers)
-                response.raise_for_status()
-                if response.status_code == 201:
-                    response_json = response.json()
-                    logging.debug("Response JSON: %s", response_json)
-                    print("Response JSON:", response_json)
-                    return response_json
-                else:
-                    logging.warning("Unexpected response code: %s", response.status_code)
-                    print("Unexpected response code:", response.status_code)
-                    return None
-            except requests.exceptions.RequestException as e:
-                error_msg = f"Ошибка при отправке запроса: {str(e)}"
-                logging.error(error_msg)
-                print(error_msg)
-                raise APIException("Ошибка при отправке запроса")
+        response = requests.post(url, json=response_data, headers=headers)
+
+        logging.debug("Response status code: %s" % response.status_code)
+        logging.debug("Response data: %s" % response.text)
+
+        if response.status_code == 201:
+            return Response(response.json(), status=status.HTTP_201_CREATED)
         else:
-            error_msg = f"Неверные данные: {serializer.errors}"
-            logging.error(error_msg)
-            print(error_msg)
-            raise APIException("Неверные данные")
+            return Response(response.text, status=response.status_code)
