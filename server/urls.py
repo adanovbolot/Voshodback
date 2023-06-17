@@ -19,4 +19,6 @@ urlpatterns = [
     path('api/v1/inventories/stores', views.AddressCreatePutView.as_view()),
     path('product/create/', views.ProductCategoryList.as_view()),
     # path('test/', views.ProductCategoryList.as_view()),
+    path('product/list/create/', views.ProductCreateView.as_view()),
+    path('product/category/get/', views.ProductListView.as_view()),
 ]

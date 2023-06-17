@@ -119,3 +119,40 @@ class ProductCategorySerializer(serializers.ModelSerializer):
         return data
 
 
+class CategorySerializer(serializers.ModelSerializer):
+    group = serializers.BooleanField(default=True)
+    name = serializers.CharField(default='Билеты на теплоходы Восход')
+
+    class Meta:
+        model = models.Product
+        exclude = ('id',)
+
+    def create(self, validated_data):
+        validated_data['uuid'] = str(uuid.uuid4())
+        instance = super().create(validated_data)
+        instance.code = str(instance.id)
+        instance.save()
+        return instance
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        return data
+
+
+class ProductCreateSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(default='Участники СВО')
+    price = serializers.DecimalField(default=1, max_digits=10, decimal_places=2)
+
+    class Meta:
+        model = models.Product
+        fields = '__all__'
+
+    def create(self, validated_data):
+        validated_data['uuid'] = str(uuid.uuid4())
+        instance = super().create(validated_data)
+        instance.code = str(instance.id)
+        instance.save()
+        return instance
+
+
+

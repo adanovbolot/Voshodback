@@ -664,3 +664,19 @@ class ProductCategoryList(generics.CreateAPIView):
         else:
             return Response(response.text, status=response.status_code)
 
+
+class ProductCreateView(generics.CreateAPIView):
+    queryset = models.Product.objects.filter(group=True)
+    serializer_class = serializers.ProductCreateSerializer
+
+    def perform_create(self, serializer):
+        parent_product = self.get_parent_product()
+        serializer.save(parent_uuid=parent_product.uuid, group=False)
+
+    def get_parent_product(self):
+        return models.Product.objects.filter(group=True).first()
+
+
+class ProductListView(generics.ListAPIView):
+    queryset = models.Product.objects.all()
+    serializer_class = serializers.ProductCreateSerializer
