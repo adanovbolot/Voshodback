@@ -39,10 +39,17 @@ def send_to_evotor(sender, **kwargs):
             logger.info('Данные для Evotor:')
             logger.info(serialized_data)
             logger.info('Ответ от Evotor:')
-            logger.info(response.json())
+
+            if response.status_code == 201 or response.status_code == 200:
+                try:
+                    response_json = response.json()
+                    logger.info(response_json)
+                except ValueError:
+                    logger.warning('Некорректный формат JSON-ответа')
+            else:
+                logger.error(f'Ошибка при отправке данных в Evotor. Код ошибки: {response.status_code}')
 
             if response.status_code == 201 or response.status_code == 200:
                 logger.info('Данные успешно отправлены в Evotor')
             else:
                 logger.error(f'Ошибка при отправке данных в Evotor. Код ошибки: {response.status_code}')
-
