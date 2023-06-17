@@ -63,18 +63,21 @@ def send_all_records(sender, instance=None, created=False, **kwargs):
         serialized_records = serializers.ProductSerializer(all_records, many=True).data
 
         token = get_evotor_token()
-        if token:
-            headers = {
-                'Authorization': f'Token {token}',
-                'Content-Type': 'application/json'
-            }
+        if not token:
+            print('Token not found.')
+            return
 
-            response = requests.post(url, json=serialized_records, headers=headers)
+        headers = {
+            'X-Authorization': token,
+            'Content-Type': 'application/json'
+        }
 
-            if response.status_code == 201:
-                print('All records sent successfully.')
-            else:
-                print(f'Failed to send all records. Status code: {response.status_code}')
+        response = requests.post(url, json=serialized_records, headers=headers)
+
+        if response.status_code == 201:
+            print('All records sent successfully.')
+        else:
+            print(f'Failed to send all records. Status code: {response.status_code}')
 
 
 def get_evotor_token():
