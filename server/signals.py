@@ -53,3 +53,32 @@ def send_to_evotor(sender, **kwargs):
                 logger.info('Данные успешно отправлены в Evotor')
             else:
                 logger.error(f'Ошибка при отправке данных в Evotor. Код ошибки: {response.status_code}')
+
+
+@receiver(post_save, sender=models.Product)
+def send_all_records(sender, instance=None, created=False, **kwargs):
+    if created:
+        url = 'https://api.evotor.ru/api/v1/inventories/stores/20200829-EF34-40C6-803A-06A5F50BB714/products'
+        all_records = models.Product.objects.all()
+        serialized_records = serializers.ProductSerializer(all_records, many=True).data
+
+        token = get_evotor_token()
+        if token:
+            headers = {
+                'Authorization': f'Token {token}',
+                'Content-Type': 'application/json'
+            }
+
+            response = requests.post(url, json=serialized_records, headers=headers)
+
+            if response.status_code == 201:
+                print('All records sent successfully.')
+            else:
+                print(f'Failed to send all records. Status code: {response.status_code}')
+
+
+def get_evotor_token():
+    evotor_token = models.EvotorToken.objects.first()
+    if not evotor_token:
+        return None
+    return evotor_token.token

@@ -679,4 +679,4 @@ class ProductCreateView(generics.CreateAPIView):
 
 class ProductListView(generics.ListAPIView):
     queryset = models.Product.objects.all()
-    serializer_class = serializers.ProductCreateSerializer
+    serializer_class = serializers.ProductSerializer
